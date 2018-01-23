@@ -1,0 +1,14 @@
+*.egg-info
+.eggs/
+*.egg/
+dist/
+build/
+.idea/
+*.pyc
+.tox/
+py27/
+target/
+*coverage*
+*.swp
+AUTHORS
+ChangeLog
