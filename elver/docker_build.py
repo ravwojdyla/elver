@@ -56,7 +56,9 @@ class docker_build(Command):
             ("gen-do-not-copy-path", None, "if set, do not copy path to the image"),
             ("gen-path-copy-dir=", None, "name of directory in the image to copy path to"),
             ("gen-requirments-file=", None, "filename of the requirments file"),
-            ("gen-do-not-install-requirments", None, "do not install pip requirments")
+            ("gen-do-not-install-requirments", None, "do not install pip requirments"),
+            ("gen-extra-statements=", None, "extra statements to add to generated dockerfile, " \
+                    "must be new line delimeted")
             ]
 
     boolean_options = [
@@ -95,6 +97,7 @@ class docker_build(Command):
         self.gen_path_copy_dir = None
         self.gen_requirments_file = None
         self.gen_do_not_install_requirments = None
+        self.gen_extra_statements = None
 
     def finalize_options(self):
         if self.repository is None:
@@ -139,6 +142,9 @@ class docker_build(Command):
                 content.append("ENTRYPOINT %s\n" % self.gen_entry_point)
             if self.gen_cmd:
                 content.append("CMD %s\n" % self.gen_cmd)
+            if self.gen_extra_statements:
+                stmts = self.gen_extra_statements.strip().splitlines()
+                content.extend(map(lambda s: s + "\n", stmts))
             f.writelines(content)
             f.flush()
         return dockerfile_generated_name
