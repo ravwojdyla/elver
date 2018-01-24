@@ -54,7 +54,9 @@ class docker_build(Command):
             ("gen-entry-point=", None, "entry point for generated dockefile"),
             ("gen-cmd=", None, "cmd for the generated dockerifle"),
             ("gen-do-not-copy-path", None, "if set, do not copy path to the image"),
-            ("gen-path-copy-dir=", None, "name of directory in the image to copy path to")
+            ("gen-path-copy-dir=", None, "name of directory in the image to copy path to"),
+            ("gen-requirments-file=", None, "filename of the requirments file"),
+            ("gen-do-not-install-requirments", None, "do not install pip requirments")
             ]
 
     boolean_options = [
@@ -91,6 +93,8 @@ class docker_build(Command):
         self.gen_cmd = None
         self.gen_do_not_copy_path = None
         self.gen_path_copy_dir = None
+        self.gen_requirments_file = None
+        self.gen_do_not_install_requirments = None
 
     def finalize_options(self):
         if self.repository is None:
@@ -110,6 +114,11 @@ class docker_build(Command):
             self.gen_do_not_copy_path = False
         if self.gen_path_copy_dir is None:
             self.gen_path_copy_dir = "/code"
+        if self.gen_requirments_file is None:
+            #TODO(rav): support all the standard names of the requirments file
+            self.gen_requirments_file = "requirements.txt"
+        if self.gen_do_not_install_requirments is None:
+            self.gen_do_not_install_requirments = False
 
     def __generate_docker_file(self, dockerfile, dockerfile_generated_name=".Dockerfile-generated"):
         import os.path as path
@@ -121,6 +130,11 @@ class docker_build(Command):
             content.append("FROM %s\n" % self.gen_base_image)
             if not self.gen_do_not_copy_path:
                 content.append("COPY %s %s\n" % (self.path, self.gen_path_copy_dir))
+            if not self.gen_do_not_install_requirments and not self.gen_do_not_copy_path:
+                req_filename = path.join(self.path, self.gen_requirments_file)
+                req_filename_docker = path.join(self.gen_path_copy_dir, self.gen_requirments_file)
+                if path.exists(req_filename):
+                    content.append("""RUN ["pip", "install", "-r", "%s"]\n""" % req_filename_docker)
             if self.gen_entry_point:
                 content.append("ENTRYPOINT %s\n" % self.gen_entry_point)
             if self.gen_cmd:
