@@ -1,0 +1,8 @@
+include ChangeLog LICENSE MANIFEST.in NOTICE README.md requirements.txt AUTHORS
+prune .circleci
+prune tests
+prune examples
+exclude test-requirements.txt
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *.un~
