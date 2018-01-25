@@ -15,4 +15,4 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-__all__ = ['docker_build']
+__all__ = ["docker_build"]

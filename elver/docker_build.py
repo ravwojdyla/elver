@@ -18,7 +18,9 @@
 # TODO(rav): should this optionally support setuptools.command.*
 
 from distutils.core import Command
-import docker 
+
+import docker
+
 
 class docker_build(Command):
     description = "build a docker image"
@@ -37,19 +39,19 @@ class docker_build(Command):
                 "always remove intermediate containers, even after unsuccessful builds"),
             ("buildargs=", None, "a dictionary of build arguments"),
             ("container-limits=", None,
-            "a dictionary of limits applied to each container created by the build process." \
-            " Valid keys: memory (set memory limit for build), memswap (total memory"\
-            " (memory + swap), -1 to disable swap), cpushares (CPU shares (relative weight))," \
-            " cpusetcpus (CPUs in which to allow execution, e.g., '0-3', '0,1' "),
-            ("shmsize=", None, "size of /dev/shm in bytes. The size must be greater than 0. " \
-                    "If omitted the system uses 64MB"),
+                "a dictionary of limits applied to each container created by the build process."
+                " Valid keys: memory (set memory limit for build), memswap (total memory"
+                " (memory + swap), -1 to disable swap), cpushares (CPU shares (relative weight)),"
+                " cpusetcpus (CPUs in which to allow execution, e.g., '0-3', '0,1' "),
+            ("shmsize=", None, "size of /dev/shm in bytes. The size must be greater than 0. "
+                "If omitted the system uses 64MB"),
             ("labels=", None, "a dictionary of labels to set on the image"),
             ("cache-from=", None, "a list of images used for build cache resolution"),
             ("target=", None, "name of the build-stage to build in a multi-stage Dockerfile"),
             ("network-mode=", None, "networking mode for the run commands during build"),
             ("squash", None, "squash the resulting images layers into a single layer"),
-            ("extra-hosts=", None, "extra hosts to add to /etc/hosts in building containers, " \
-                    "as a mapping of hostname to IP address"),
+            ("extra-hosts=", None, "extra hosts to add to /etc/hosts in building containers, "
+                "as a mapping of hostname to IP address"),
             ("gen-base-image=", None, "base image for auto generated dockerfile"),
             ("gen-entry-point=", None, "entry point for generated dockefile"),
             ("gen-cmd=", None, "cmd for the generated dockerifle"),
@@ -57,8 +59,8 @@ class docker_build(Command):
             ("gen-path-copy-dir=", None, "name of directory in the image to copy path to"),
             ("gen-requirments-file=", None, "filename of the requirments file"),
             ("gen-do-not-install-requirments", None, "do not install pip requirments"),
-            ("gen-extra-statements=", None, "extra statements to add to generated dockerfile, " \
-                    "must be new line delimeted")
+            ("gen-extra-statements=", None, "extra statements to add to generated dockerfile, "
+                "must be new line delimeted")
             ]
 
     boolean_options = [
@@ -118,7 +120,7 @@ class docker_build(Command):
         if self.gen_path_copy_dir is None:
             self.gen_path_copy_dir = "/code"
         if self.gen_requirments_file is None:
-            #TODO(rav): support all the standard names of the requirments file
+            # TODO(rav): support all the standard names of the requirments file
             self.gen_requirments_file = "requirements.txt"
         if self.gen_do_not_install_requirments is None:
             self.gen_do_not_install_requirments = False
