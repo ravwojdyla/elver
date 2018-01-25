@@ -19,6 +19,6 @@
 from setuptools import setup
 
 setup(
-    setup_requires=['pbr', 'elver'],
+    setup_requires=["pbr", "elver"],
     pbr=True,
 )
