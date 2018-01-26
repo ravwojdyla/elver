@@ -19,4 +19,4 @@
 from __future__ import print_function
 
 if __name__ == "__main__":
-    print("dummy package")
+    print("I ran inside a docker container!")
